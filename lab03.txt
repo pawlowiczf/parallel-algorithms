@@ -1,0 +1,35 @@
+W ramach zadania należy zaimplementować równoległą wersję algorytmu z laboratorium 1. Podczas oddawania zadania wymagane jest przedstawienie i omówienie następujących elementów:
+
+1. Działająca część równoległa (2 pkt)
+Należy umieć zademonstrować działającą wersję zaimplementowanego algorytmu, która wykorzystuje przetwarzanie równoległe.
+
+2. Wizualizacja i weryfikacja wyników (1 pkt)
+Wymagane jest przedstawienie wyników działania algorytmu dla małych danych. Wyniki te należy zwizualizować w taki sposób, aby potwierdzić poprawność działania algorytmu. Może to być, np. wykres 3D, mapa ciepła (heatmapa) lub inna przejrzysta reprezentacja.
+
+3. Analiza wydajności i wizualizacja (3 pkt)
+Należy przygotować i zaprezentować wykresy przedstawiające kluczowe metryki wydajności algorytmu równoległego:
+
+Przyspieszenie (S(P))
+
+Efektywność (E(P))
+
+Metryka Karpa-Flatta (f(P))
+
+Definicje metryk:
+
+Przyspieszenie (S(P)): Stosunek czasu wykonania zadania na jednym procesie (T(1)) do czasu wykonania na P procesach (T(P)).
+
+S(P)=T(1)/T(P)
+Efektywność (E(P)): Stosunek przyspieszenia do liczby użytych procesów (P).
+
+E(P)=S(P)/P
+Metryka Karpa-Flatta (f(P)): Wskaźnik, który pozwala oszacować sekwencyjną część algorytmu:
+
+f(P)=[1/S(P)−1/P]/[1−1/P]
+Wymogi dotyczące wykresów:
+
+Każda pojedyncza krzywa na wykresie powinna dotyczyć tego samego rozmiaru problemu.
+
+Wykresy powinny zawierać krzywe dla co najmniej dwóch-trzech różnych rozmiarów problemu, aby pokazać zależności S(P), E(P) oraz f(P) od skali problemu.
+
+Wykresy muszą być starannie opracowane, co oznacza, że powinny posiadać czytelne podpisy pod rysunkami oraz na osiach.

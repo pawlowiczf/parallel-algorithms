@@ -1,0 +1,15 @@
+Na zajęciach jako narzędzia do programowania równoległego używać będziemy MPI.
+Można używać mpi4py - Pythonowego wrappera do MPI w języku C .
+Aby uruchomić zadania w mpi, na klastrze Ares obowiązuje użycie systemu kolejkowego SLURM . 
+Należy używać tego systemu i nie uruchamiać ciężkich zadań na  maszynie dostępowej (grozi blokadą konta)!
+
+Quickstart do zadania 2 znajduje się w pliku  dołączonego do tego zadania
+
+Celem zadania 2 (część podstawowa) jest:
+Sprawdzić, czy działa Quickstart
+Przeglądnąć tutorial https://nyu-cds.github.io/python-mpi/02-messagepassing/ (zwłaszcza osoby, które nie miały TPR)
+Napisać program liczący sito Erastotenesa (uwaga - zapoznać się ze wsadowym sposobem uruchamiania zadań w SLURM, który może być wygodniejszy dla dłuższych zadań)
+Celem zadania 2 (część zaawansowana) jest:
+zapoznać się z możliwościami programowania w MPI za pomocą pamięci współdzielonej (funkcje MPI.Win.Allocate_shared oraz MPI.Win.Fence) https://mpi4py.readthedocs.io/en/4.0.3/reference/mpi4py.MPI.Win.html 
+Prosty przykład z komentarzami jest w załączonym pliku test_sm.py - zapoznać się i uruchomić
+Zaproponować modyfikację algorytmu sita Erastotenesa, tak aby używać tablicy współdzielonej.
