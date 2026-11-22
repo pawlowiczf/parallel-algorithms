@@ -1,0 +1,36 @@
+Równoległy algorytm Branch and Bound
+
+Wprowadzenie
+Znaną klasą problemów są zadania decyzyjne. Przykładem takiego problemu może być optymalizacja zagospodarownia miejsca w okreslonym obszarze potrzebna m.in w projektowaniu ukladow VLSI.
+
+Powyższy link (https://www.mcs.anl.gov/~itf/dbpp/text/node21.html#SECTION02370000000000000000) pokazuje jeden ze sposobów zrównoleglania takiego problemu za pomocą drzewa i algorytmu "branch-and-bound search". Zadanie ma na celu zapóźnianie się z tym algorytmem i zastosowanie go do problemu decyzyjnego na przykładzie problemu komiwojażera.
+
+Problem komiwojażera (travelling salesman problem)
+Dane jest N miast oraz długości odcinków pomiędzy miastami, należy znaleźć cykl o minimalnej długości zawierający wszystkie miasta.
+
+Dla ustalenia danych: zadanie należy wykonać na miastach, których położenie losujemy z punktów leżących  na okręgu
+
+Uwaga: użycie algorytmu branch-and-bound jest obowiązkowe dla tego ćwiczenia!
+
+Zadanie
+Zaimplementuj równoległy algorytm branch and bound za pomocą  dynamicznego zarzadzanie taskami jak w zadaniu ze zbiorem Julii z lab5:
+
+- proces nadzorujący generuje wszystkie możliwe ścieżki startujące z miasta nr 1 do pewnej głębokości drzewa d (np. dla N=4 d=2 mamy [1,2], [1,3], [1,4]
+
+- proces nadzorujący używa MPIPoolExecutor (funkcja map) do przydzielenia ścieżek do procesów wykonujących przeszukiwanie poddrzewa opartego na danej ścieżce.
+
+- Pruning odbywa się tylko na podstawie lokalnych przeszukiwań
+
+Zbadać wpływ liczby procesów oraz głębokości d na przyspieszenie, efektywność oraz na serial fraction. Wynikiem powinny być wykresy z co najmniej dwóch eksperymentów np.:
+
+- ustalone d, liczba procesów rośnie (dla tego samego problemu).
+- ustalona liczba procesów, d rośnie (dla tego samego problemu)
+
+Alternatywa:
+
+- ustalone d (stosunkowo małe), liczba procesów rośnie (dla tego samego problemu).
+- ustalone d (stosunkowo duże), liczba procesów rośnie (dla tego samego problemu)
+
+Punktacja:
+- Implementacja równoległego (działająca jedna wersja) B&B: 1 pkt
+- Wykresy przyspieszenia, efektywności oraz serial fraction: 3 pkt x 2 eksperymenty = 6 pkt

@@ -81,7 +81,7 @@ Ta sama sekcja podaje kryterium δ < ε, które nie ogranicza błędu do ε. Bł
 
 ## Uruchomienie
 
-Pomiary i test pamięci uruchamia się skryptami, a `lab03.ipynb` zawiera wszystkie wykresy i tabele. Do ręcznego użycia `mpiexec` jego katalog musi być w PATH, po instalacji z pip to `%APPDATA%\Python\Library\bin`.
+Pomiary i test pamięci uruchamia się skryptami, a `notebook.ipynb` zawiera wszystkie wykresy i tabele. Do ręcznego użycia `mpiexec` jego katalog musi być w PATH, po instalacji z pip to `%APPDATA%\Python\Library\bin`.
 
 ```
 pip install mpi4py impi-rt
