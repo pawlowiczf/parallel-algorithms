@@ -30,9 +30,7 @@ def distances(n, seed):
     rng = random.Random(seed)
     angles = [rng.uniform(0, 2 * math.pi) for _ in range(n)]
     pts = [(math.cos(a), math.sin(a)) for a in angles]
-    return tuple(
-        tuple(math.dist(p, q) for q in pts) for p in pts
-    )
+    return tuple(tuple(math.dist(p, q) for q in pts) for p in pts)
 
 
 def greedy_completion(prefix, dist):
@@ -62,8 +60,9 @@ def instance_data(n, seed):
     The cache holds no search results, so tasks still share no pruning bound.
     """
     dist = distances(n, seed)
-    min_out = tuple(min(x for j, x in enumerate(row) if j != i)
-                    for i, row in enumerate(dist))
+    min_out = tuple(
+        min(x for j, x in enumerate(row) if j != i) for i, row in enumerate(dist)
+    )
     order = tuple(tuple(sorted(range(n), key=row.__getitem__)) for row in dist)
     return dist, min_out, order
 
@@ -85,7 +84,7 @@ def two_opt_tour(n, seed):
                 a, b = tour[i - 1], tour[i]
                 c, e = tour[j], tour[(j + 1) % n]
                 if dist[a][c] + dist[b][e] < dist[a][b] + dist[c][e] - 1e-12:
-                    tour[i:j + 1] = reversed(tour[i:j + 1])
+                    tour[i : j + 1] = reversed(tour[i : j + 1])
                     improved = True
     length = sum(dist[tour[k]][tour[(k + 1) % n]] for k in range(n))
     return length, tuple(tour)
@@ -181,10 +180,18 @@ def main():
     parser.add_argument("--n", type=int, default=12, help="number of cities")
     parser.add_argument("--d", type=int, default=3, help="depth of the task paths")
     parser.add_argument("--seed", type=int, default=1)
-    parser.add_argument("--bound", choices=["none", "minedge"], default="minedge",
-                        help="lower bound used for pruning")
-    parser.add_argument("--init", choices=["greedy", "2opt"], default="greedy",
-                        help="initial upper bound inside every task")
+    parser.add_argument(
+        "--bound",
+        choices=["none", "minedge"],
+        default="minedge",
+        help="lower bound used for pruning",
+    )
+    parser.add_argument(
+        "--init",
+        choices=["greedy", "2opt"],
+        default="greedy",
+        help="initial upper bound inside every task",
+    )
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--serial", action="store_true", help="no MPI, one process")
     args = parser.parse_args()
@@ -193,8 +200,10 @@ def main():
 
     if args.serial:
         workers = 0
-        runs = [run_serial(args.n, args.seed, args.bound, args.init)
-                for _ in range(args.repeats)]
+        runs = [
+            run_serial(args.n, args.seed, args.bound, args.init)
+            for _ in range(args.repeats)
+        ]
     else:
         from mpi4py import MPI
         from mpi4py.futures import MPIPoolExecutor
@@ -211,12 +220,24 @@ def main():
             ]
 
     for elapsed, tasks, (length, tour, nodes) in runs:
-        print(json.dumps({
-            "n": args.n, "d": 1 if args.serial else args.d, "bound": args.bound, "init": args.init,
-            "workers": workers, "seed": args.seed,
-            "tasks": tasks, "time": elapsed, "length": length,
-            "nodes": nodes, "tour": tour,
-        }), flush=True)
+        print(
+            json.dumps(
+                {
+                    "n": args.n,
+                    "d": 1 if args.serial else args.d,
+                    "bound": args.bound,
+                    "init": args.init,
+                    "workers": workers,
+                    "seed": args.seed,
+                    "tasks": tasks,
+                    "time": elapsed,
+                    "length": length,
+                    "nodes": nodes,
+                    "tour": tour,
+                }
+            ),
+            flush=True,
+        )
 
 
 if __name__ == "__main__":

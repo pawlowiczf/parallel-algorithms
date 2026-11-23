@@ -24,9 +24,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.ticker import FuncFormatter, ScalarFormatter
 
-plt.rcParams.update({"font.size": 11, "axes.labelsize": 11, "legend.fontsize": 10,
-                     "lines.markersize": 5, "savefig.dpi": 200,
-                     "savefig.bbox": "tight"})
+plt.rcParams.update(
+    {
+        "font.size": 11,
+        "axes.labelsize": 11,
+        "legend.fontsize": 10,
+        "lines.markersize": 5,
+        "savefig.dpi": 200,
+        "savefig.bbox": "tight",
+    }
+)
 
 # Curves differ in colour (different luminance), marker and line style, so they
 # stay distinguishable in a grayscale print.
@@ -34,8 +41,11 @@ COLORS = ["#000000", "#d95f02", "#1b9e77", "#7570b3"]
 MARKERS = ["o", "s", "^", "D"]
 STYLES = ["-", "--", ":", "-."]
 
-METRICS = [("S", "Speedup S(P)"), ("E", "Efficiency E(P)"),
-           ("f", "Karp-Flatt serial fraction f(P)")]
+METRICS = [
+    ("S", "Speedup S(P)"),
+    ("E", "Efficiency E(P)"),
+    ("f", "Karp-Flatt serial fraction f(P)"),
+]
 
 
 def curve_style(i):
@@ -56,10 +66,13 @@ def summarize(df):
     """Median time per (d, workers); the sequential run is returned separately."""
     seq = df[df.workers == 0]
     par = df[df.workers > 0]
-    med = (par.groupby(["d", "workers"])
-              .agg(time=("time", "median"), nodes=("nodes", "median"),
-                   tasks=("tasks", "first"))
-              .reset_index())
+    med = (
+        par.groupby(["d", "workers"])
+        .agg(
+            time=("time", "median"), nodes=("nodes", "median"), tasks=("tasks", "first")
+        )
+        .reset_index()
+    )
     return float(seq.time.median()), float(seq.nodes.median()), med
 
 
@@ -100,7 +113,9 @@ def metric_figure(df, group_col, x_col, label_fn, path):
         if col == "S" and x_col == "workers":
             # Ideal speedup S = P; log-log axes turn it into a diagonal.
             ax.plot(xs, xs, color="0.5", lw=1, label="ideal S = P")
-            plain_log_ticks(ax, "x", [p for p in xs if p != 24])  # 24 and 32 would overlap
+            plain_log_ticks(
+                ax, "x", [p for p in xs if p != 24]
+            )  # 24 and 32 would overlap
             plain_log_ticks(ax, "y", [1, 2, 4, 8, 16, 32])
         elif x_col == "workers":
             ax.set_xticks([1, 8, 16, 24, 32, 47])
@@ -114,8 +129,14 @@ def metric_figure(df, group_col, x_col, label_fn, path):
         ax.set_ylabel(ylabel)
         ax.grid(alpha=0.3)
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=len(labels),
-               bbox_to_anchor=(0.5, 1.08), frameon=False)
+    fig.legend(
+        handles,
+        labels,
+        loc="upper center",
+        ncol=len(labels),
+        bbox_to_anchor=(0.5, 1.08),
+        frameon=False,
+    )
     fig.tight_layout()
     fig.savefig(path)
     plt.close(fig)
@@ -128,8 +149,14 @@ def work_figure(med, seq_nodes, path):
     ax.plot(ratio.index, ratio.values, color="k", marker="o")
     ax.axhline(1, color="0.5", lw=1, label="sequential search = 1")
     for d, v in ratio.items():
-        ax.annotate(f"{v:.3g}x", (d, v), textcoords="offset points",
-                    xytext=(0, 7), ha="center", fontsize=9)
+        ax.annotate(
+            f"{v:.3g}x",
+            (d, v),
+            textcoords="offset points",
+            xytext=(0, 7),
+            ha="center",
+            fontsize=9,
+        )
     if ratio.max() > 3:  # large effect: log axis with plain labels
         ax.set_yscale("log")
         ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
@@ -158,7 +185,8 @@ def true_speedup_figure(med, seq_time, path):
     ax.set_yscale("log", base=2)
     # label values below 1 as fractions (1/4, 1/16, ...) instead of 0.0625
     ax.yaxis.set_major_formatter(
-        FuncFormatter(lambda v, _: f"{v:g}" if v >= 1 else f"1/{round(1 / v)}"))
+        FuncFormatter(lambda v, _: f"{v:g}" if v >= 1 else f"1/{round(1 / v)}")
+    )
     ax.yaxis.set_minor_formatter(FuncFormatter(lambda v, _: ""))
     ax.set_xlabel("number of workers P")
     ax.set_ylabel("speedup T_seq / T(P)")
@@ -175,8 +203,9 @@ def ablation_figure(files, path):
     for i, f in enumerate(files):
         df = load(f)
         seq = df[df.workers == 0].groupby("n").nodes.median()
-        ax.plot(seq.index, seq.values, label=f"bound = {df.bound.iloc[0]}",
-                **curve_style(i))
+        ax.plot(
+            seq.index, seq.values, label=f"bound = {df.bound.iloc[0]}", **curve_style(i)
+        )
     ax.set_yscale("log")
     ax.set_xlabel("number of cities N")
     ax.set_ylabel("visited nodes (sequential)")
@@ -192,10 +221,20 @@ def main():
     ap.add_argument("data")
     ap.add_argument("outdir")
     ap.add_argument("--ablation", nargs="*", default=[])
-    ap.add_argument("--fixed-p", type=int, nargs="+", default=[8, 32],
-                    help="worker counts for experiment 2")
-    ap.add_argument("--depths", type=int, nargs="+", default=[2, 3, 4],
-                    help="depths drawn in experiment 1")
+    ap.add_argument(
+        "--fixed-p",
+        type=int,
+        nargs="+",
+        default=[8, 32],
+        help="worker counts for experiment 2",
+    )
+    ap.add_argument(
+        "--depths",
+        type=int,
+        nargs="+",
+        default=[2, 3, 4],
+        help="depths drawn in experiment 1",
+    )
     args = ap.parse_args()
 
     out = Path(args.outdir)
@@ -208,17 +247,16 @@ def main():
 
     # Experiment 1: fixed d, growing P.
     exp1 = metrics[metrics.d.isin(args.depths)]
-    metric_figure(exp1, "d", "workers", lambda d: f"d = {d}",
-                  out / "exp1_fixed_d.png")
+    metric_figure(exp1, "d", "workers", lambda d: f"d = {d}", out / "exp1_fixed_d.png")
 
     # Experiment 2: fixed P, growing d.
     exp2 = metrics[metrics.workers.isin(args.fixed_p)]
-    metric_figure(exp2, "workers", "d", lambda p: f"P = {p}",
-                  out / "exp2_fixed_p.png")
+    metric_figure(exp2, "workers", "d", lambda p: f"P = {p}", out / "exp2_fixed_p.png")
 
     work_figure(med, seq_nodes, out / "work_vs_d.png")
-    true_speedup_figure(med[med.d.isin(args.depths)], seq_time,
-                        out / "speedup_vs_sequential.png")
+    true_speedup_figure(
+        med[med.d.isin(args.depths)], seq_time, out / "speedup_vs_sequential.png"
+    )
     if args.ablation:
         ablation_figure(args.ablation, out / "ablation_bound.png")
 

@@ -24,11 +24,17 @@ def main():
             r = b.search_subtree((p, n, 1, "minedge", "2opt"))
             secs.append(time.perf_counter() - t0)
             nodes.append(r[2])
-        rows.append({"n": n, "d": d, "tasks": len(nodes),
-                     "heaviest_share_nodes": max(nodes) / sum(nodes),
-                     "max_speedup_nodes": sum(nodes) / max(nodes),
-                     "heaviest_share_time": max(secs) / sum(secs),
-                     "max_speedup_time": sum(secs) / max(secs)})
+        rows.append(
+            {
+                "n": n,
+                "d": d,
+                "tasks": len(nodes),
+                "heaviest_share_nodes": max(nodes) / sum(nodes),
+                "max_speedup_nodes": sum(nodes) / max(nodes),
+                "heaviest_share_time": max(secs) / sum(secs),
+                "max_speedup_time": sum(secs) / max(secs),
+            }
+        )
         print(rows[-1], flush=True)
     with open("results/task_shares.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))

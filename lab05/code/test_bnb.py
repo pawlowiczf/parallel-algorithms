@@ -19,17 +19,21 @@ def main():
     for seed in range(1, 11):
         for n in (6, 7, 8, 9):
             dist = b.distances(n, seed)
-            brute = min(tour_length((0,) + p, dist)
-                        for p in itertools.permutations(range(1, n)))
+            brute = min(
+                tour_length((0,) + p, dist) for p in itertools.permutations(range(1, n))
+            )
             for bound in ("none", "minedge"):
                 for init in ("greedy", "2opt"):
                     for d in (1, 2, 3, n):
                         tasks = [(p, n, seed, bound, init) for p in b.prefixes(n, d)]
-                        length, tour, _ = b.combine([b.search_subtree(t) for t in tasks])
+                        length, tour, _ = b.combine(
+                            [b.search_subtree(t) for t in tasks]
+                        )
                         assert abs(length - brute) < 1e-9, (seed, n, bound, init, d)
                         assert sorted(tour) == list(range(n)), "not a permutation"
-                        assert abs(tour_length(tour, dist) - length) < 1e-9, \
+                        assert abs(tour_length(tour, dist) - length) < 1e-9, (
                             "tour does not match the reported length"
+                        )
                         checked += 1
     print(f"OK: {checked} configurations match brute force")
 
